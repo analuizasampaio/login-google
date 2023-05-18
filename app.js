@@ -11,7 +11,13 @@ const authRouter = require("./routes/auth");
 const usePassport = require("./config/auth/passport");
 const isAuthenticated = require("./middlewares/routes-guard");
 const populateUser = require("./middlewares/logged-user");
+
 const { connectDB } = require("./config/db/datasource");
+
+app.use(express.static('public'));
+
+const stripe = require('stripe')('sk_test_51N9BvXDmpzzBxcb8ybRndRdZsrRRu4uPvL1HKgtbwgj2RH5FfBK889gZoGUDZ2yfjriMyV8Uzs1AV58sRJkEX8cR00746zXGbE');
+
 
 connectDB();
 
@@ -44,12 +50,33 @@ app.use(populateUser);
 app.use("/oauth2", authRouter);
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index")
 });
 
-// Use auth middleware to protect this route
-app.get("/dashboard", isAuthenticated, (req, res) => {
-  res.render("dashboard");
+//STRIPE
+
+app.get("/payment", (req, res) => {
+  res.render("payment")
 });
+
+const YOUR_DOMAIN = 'http://localhost:3000';
+
+app.post('/create-checkout-session', async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: 'price_1N9EsaDmpzzBxcb8n7HBIHbt',
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${YOUR_DOMAIN}/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+  });
+
+  res.redirect(303, session.url);
+});
+
 
 app.listen(PORT, () => console.log(`⚡Running on http://localhost:${PORT}`));

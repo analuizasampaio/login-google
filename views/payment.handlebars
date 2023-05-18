@@ -1,0 +1,28 @@
+<html>
+<title>Stripe Payment Demo</title>
+<script src="https://js.stripe.com/v3/"></script>
+
+<body>
+  <div>
+    <h2>Welcome to Payment Gateway {{user.name}}</h2>
+    <img src="{{user.image}}" alt="{{user.name}} profile picture" />
+    <br />
+    <br />
+  </div>
+    <section>
+      <div class="product">
+        <img src="https://i.imgur.com/OVko5.jpeg" alt="remedio" />
+        <div class="description">
+          <h3>Remédio</h3>
+          <h5>R$1.00</h5>
+        </div>
+      </div>
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+
+    <a href="/">Voltar para Home</a>
+</body>
+
+</html>
