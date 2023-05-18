@@ -1,0 +1,13 @@
+{{#unless user.googleId}}
+  <h1>Olá 👋🏽</h1>
+  <a href="/oauth2/login/google">Login com Google</a>
+{{/unless}}
+
+{{#if user}}
+  <h1 style="display: inline;">Olá {{user.name}}</h1>
+  <a href="/oauth2/logout">Logout</a>
+{{/if}}
+
+<br />
+<br />
+<a href="/dashboard">Dashboard (rota protegida)</a>
